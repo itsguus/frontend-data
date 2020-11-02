@@ -1,0 +1,17 @@
+title: 
+description: 
+url: 
+
+
+defaults:
+  -
+    scope:
+      path: "" # an empty string here means all files in the project
+    values:
+      layout: "page"
+
+collections:
+  namen:
+    output: true
+  values:
+    layout: home
