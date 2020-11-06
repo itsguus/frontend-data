@@ -40,13 +40,81 @@ getData(parkingToegangUrl).then(
 
 
 function addCityNameToWorkArray(geoDataSet) {
-    let areaIdsAndGeoData = geoDataSet.map(entry => [entry.areaid, {geodata: entry.areageometryastext}]),
-    areaIdsAndGeoDataThatIWant = areaIdsAndGeoData.filter(checkIfAreaIdInWorkArray);
-    console.log(areaIdsAndGeoDataThatIWant);
-    // transformLongLatIntoCityName()
+    let areaIdsAndGeoData = geoDataSet.map(entry => [entry.areaid, { geodata: entry.areageometryastext }]),
+        areaIdsAndGeoDataThatIWant = areaIdsAndGeoData.filter(checkIfAreaIdInWorkArray);
+        
+        areaIdsAndGeoDataThatIWant = areaIdsAndGeoDataThatIWant.map(shapeToLatLong);
+    
+    // let cityNames = areaIdsAndGeoDataThatIWant.map(translateLatLongToCityName);
+
+
+    // console.log(areaIdsAndGeoDataThatIWant[0]);
+
+    translateLatLongToCityName(areaIdsAndGeoDataThatIWant[0]).then(
+        value => {console.log(value);}
+    );
 }
 
 
+async function translateLatLongToCityName(latLong) {
+    var lat = latLong[1].lat,
+        long = latLong[1].long;
+    // cityUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+ lat + ","+ long + "&key=AIzaSyAbI0apjUDIAYQua581VGPwBsDOqtD-FsA", 
+    cityUrl = "https://nominatim.openstreetmap.org/reverse?format=json&lat=" + lat + "&lon=" + long + "&zoom=18&addressdetails=1";
+    
+    return cityName = [latLong[0], {"cityname": "Guustown"}];
+
+    // const response = await fetch(cityUrl);
+    // const data = await response.json();
+    // return cityName = await data.address.town;
+}
+
+
+//  https://maps.googleapis.com/maps/api/geocode/json?latlng=[LAT],[LONG]&key=AIzaSyAbI0apjUDIAYQua581VGPwBsDOqtD-FsA
+
+function shapeToLatLong(shape) {
+    var polygonString = shape[1].geodata,
+    lat,
+    long;
+    if (polygonString.includes("POLYGON")) {
+        var pointsArray = polygonString
+            .replace("POLYGON", "")
+            .replace("((", "")
+            .replace("))", "")
+            .trim()
+            .split(",");
+        points = pointsArray.map(point => point.trim().split(" ")),
+        lat = getAverage(points, 1),
+        long = getAverage(points, 0);
+    }
+    else {
+        var latLong = getLatLong(shape);
+        lat = latLong[0]
+        long = latLong[1]
+    }
+    return [shape[0], { "lat": lat, "long": long }];
+}
+
+function getAverage(array, index) {
+    var total = 0;
+    for (var i in array) {
+        total = total + parseFloat((array[i][index]));
+    }
+    return (total / array.length);
+}
+
+function getLatLong(geoPoint) {
+    var latLong = [],
+        pointString = geoPoint[1].geodata;
+    latLong = pointString
+        .replace("POINT", "")
+        .replace("(", "")
+        .replace(")", "")
+        .trim()
+        .split(" ");
+    latLong = [parseFloat(latLong[1]), parseFloat(latLong[0])]; // as it was Long Lat otherwise
+    return latLong;
+}
 
 function checkIfAreaIdInWorkArray(areaIdEntry) {
     const areaId = areaIdEntry[0];
@@ -74,11 +142,11 @@ function addCapacityToWorkArray(dataSet) {
 
 function transformSingleEntry(entryToAdd, dataSetToBeAddedTo) {
     const entryToAddId = entryToAdd[0],
-    entryToAddObjs = entryToAdd[1];
+        entryToAddObjs = entryToAdd[1];
 
 
-    if(dataSetToBeAddedTo.find(entry => entry[0] == entryToAddId)) {
-        var  matchedArray = dataSetToBeAddedTo.find(entry => entry[0] == entryToAddId);
+    if (dataSetToBeAddedTo.find(entry => entry[0] == entryToAddId)) {
+        var matchedArray = dataSetToBeAddedTo.find(entry => entry[0] == entryToAddId);
         matchedArray.push(entryToAddObjs)
         return matchedArray;
     }
@@ -86,7 +154,7 @@ function transformSingleEntry(entryToAdd, dataSetToBeAddedTo) {
 }
 
 function isNull(dataEntry) {
-    if(dataEntry == null) return true;
+    if (dataEntry == null) return true;
     return false;
 }
 
@@ -119,5 +187,10 @@ function groupByKey(array, key) {
 }
 
 
+//      https://maps.googleapis.com/maps/api/geocode/json?latlng=[LAT],[LONG]&key=AIzaSyAbI0apjUDIAYQua581VGPwBsDOqtD-FsA
+
 
 // API Code LocationIQ pk.d7636e5d5290f28cacda9f815b4a7b0d
+
+
+// API Code Google AIzaSyAbI0apjUDIAYQua581VGPwBsDOqtD-FsA
