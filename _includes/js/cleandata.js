@@ -5,9 +5,9 @@ var parkingToegangUrl = "https://opendata.rdw.nl/resource/edv8-qiyg.json?$limit=
     workLocal = true;
 
 if (workLocal) {
-    parkingToegangUrl = "/data/parking-toegang.json"
-    geoDataUrl = "/data/geodata.json"
-    parkeerGebiedUrl = "/data/parkeergebied.json"
+    parkingToegangUrl = "/frontend-data/data/parking-toegang.json"
+    geoDataUrl = "/frontend-data/data/geodata.json"
+    parkeerGebiedUrl = "/frontend-data/data/parkeergebied.json"
 }
 
 let workArray = [];
@@ -49,7 +49,7 @@ function addCityNameToWorkArray(geoDataSet) {
 
     // collectData(areaIdsAndGeoDataThatIWant, 0);
 
-    getData('/data/AreaIDwithlocationdata.json').then(
+    getData('/frontend-data/data/AreaIDwithlocationdata.json').then(
         dataSet => {
             let filteredSet = dataSet.filter(isObjectFilled);
             let areaIDWithCityName = filteredSet.map(cityDataToCityName);
@@ -174,8 +174,6 @@ function checkIfAreaIdInWorkArray(areaIdEntry) {
     const areaId = areaIdEntry[0];
     return (listOfUsableAreaIds.includes(areaId));
 }
-
-
 
 
 function setUpCleanDataSetWithIds(dataSet) {
