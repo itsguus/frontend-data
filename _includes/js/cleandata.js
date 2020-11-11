@@ -56,7 +56,7 @@ function addCityNameToWorkArray(geoDataSet) {
             workArray = areaIDWithCityName.map(entry => transformSingleEntry(entry, workArray));
             workArray = workArray.filter(entry => !isNull(entry));
             workArray = workArray.map(reformatDataEntry);
-            makeGraphsWithD3(workArray);
+            initD3Graphs(workArray);
         }
     );
 }

@@ -1,7 +1,40 @@
 {% include header.html %}
 
-<svg width="960" height="1000">
+<section class="visualisation">
+    <h1>Beschikbare parkeerplaatsen</h1>
+    <h2><span class="day">MAANDAG</span> <span class="time">12:00</span></h2>
+    <svg width="1200" height="600"></svg>
+</section>
 
-</svg>
 
-{% include footer.html %}   
+<section class="inputs">
+    <div class="days">
+        <h3>DAG</h3>
+        <input type="radio" name="DAY" value="MAANDAG" id="MAANDAG" checked=true>
+        <label for="MAANDAG">MA</label>
+        <input type="radio" name="DAY" value="DINSDAG" id="DINSDAG">
+        <label for="DINSDAG">DI</label>
+        <input type="radio" name="DAY" value="WOENSDAG" id="WOENSDAG">
+        <label for="WOENSDAG">WO</label>
+        <input type="radio" name="DAY" value="DONDERDAG" id="DONDERDAG">
+        <label for="DONDERDAG">DO</label>
+        <input type="radio" name="DAY" value="VRIJDAG" id="VRIJDAG">
+        <label for="VRIJDAG">VR</label>
+        <input type="radio" name="DAY" value="ZATERDAG" id="ZATERDAG">
+        <label for="ZATERDAG">ZA</label>
+        <input type="radio" name="DAY" value="ZONDAG" id="ZONDAG">
+        <label for="ZONDAG">ZO</label>
+    </div>
+    <div class="time">
+        <h3>TIJD  <span></span></h3>
+        <span>0:00</span>
+        <input type="range" name="time" id="time" min="0" max="24" value="12">
+        <span>24:00</span>
+    </div>
+    <h3>STEDEN</h3>
+    <div class="cities">
+
+    </div>
+</section>
+
+{% include footer.html %}
