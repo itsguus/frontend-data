@@ -29,9 +29,6 @@ h4 {font-size: 1.2rem;}
     h2 {font-size: 2.4rem;}
 }
 
-p {margin-bottom: 0.2rem; font-size: 0.8rem; margin-left: 2rem;}
-main { margin: 1rem;}
-main div {display: flex; flex-wrap: wrap; justify-content: space-between;}
-main div span { margin: 0.5rem; font-size: 0.8rem; cursor: pointer;}
-main div:hover span.gamen {color: red;}
-
+rect {
+    fill: steelblue;
+}

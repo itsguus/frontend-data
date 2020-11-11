@@ -5,9 +5,9 @@ var parkingToegangUrl = "https://opendata.rdw.nl/resource/edv8-qiyg.json?$limit=
     workLocal = true;
 
 if (workLocal) {
-    parkingToegangUrl = "/parking-toegang.json"
-    geoDataUrl = "/geodata.json"
-    parkeerGebiedUrl = "/parkeergebied.json"
+    parkingToegangUrl = "/data/parking-toegang.json"
+    geoDataUrl = "/data/geodata.json"
+    parkeerGebiedUrl = "/data/parkeergebied.json"
 }
 
 let workArray = [];
@@ -30,62 +30,116 @@ getData(parkingToegangUrl).then(
                         workArray = listOfUsableAreaIds;
                         addDaysToWorkArray(parkingToegangData);
                         addCapacityToWorkArray(parkeerGebiedData);
-                        addCityNameToWorkArray(geoData);
-                        // console.log(workArray);
+                        addCityNameToWorkArray(geoData)
                     })
             })
     });
 
 
 
+var myObject = [];
 
 function addCityNameToWorkArray(geoDataSet) {
     let areaIdsAndGeoData = geoDataSet.map(entry => [entry.areaid, { geodata: entry.areageometryastext }]),
         areaIdsAndGeoDataThatIWant = areaIdsAndGeoData.filter(checkIfAreaIdInWorkArray);
-        
-        areaIdsAndGeoDataThatIWant = areaIdsAndGeoDataThatIWant.map(shapeToLatLong);
-    
+
+    areaIdsAndGeoDataThatIWant = areaIdsAndGeoDataThatIWant.map(shapeToLatLong);
+
     // let cityNames = areaIdsAndGeoDataThatIWant.map(translateLatLongToCityName);
 
+    // collectData(areaIdsAndGeoDataThatIWant, 0);
 
-    // console.log(areaIdsAndGeoDataThatIWant[0]);
-
-    translateLatLongToCityName(areaIdsAndGeoDataThatIWant[0]).then(
-        value => {console.log(value);}
+    getData('/data/AreaIDwithlocationdata.json').then(
+        dataSet => {
+            let filteredSet = dataSet.filter(isObjectFilled);
+            let areaIDWithCityName = filteredSet.map(cityDataToCityName);
+            workArray = areaIDWithCityName.map(entry => transformSingleEntry(entry, workArray));
+            workArray = workArray.filter(entry => !isNull(entry));
+            workArray = workArray.map(reformatDataEntry);
+            makeGraphsWithD3(workArray);
+        }
     );
 }
 
+function reformatDataEntry(dataEntry) {
+    const areaId = dataEntry[0],
+        weekdays = dataEntry[1],
+        capacity = dataEntry[2].capacity,
+        laadPalen = dataEntry[2].laadPalen;
+    var cityName = dataEntry[3].cityname
 
-async function translateLatLongToCityName(latLong) {
+    if (cityName == null) cityName = dataEntry[4].cityname
+
+    return { stad: cityName, capaciteit: capacity, openingstijden: weekdays, laadpalen: laadPalen };
+}
+
+
+function isObjectFilled(object) {
+    if (object[1].cityname == null) return false;
+    return true;
+}
+
+
+function cityDataToCityName(cityObject) {
+    var cityData = cityObject[1].cityname,
+        areaID = cityObject[0],
+        cityName = "";
+
+
+
+    if ('town' in cityData) cityName = cityData.town;
+    else if ('city' in cityData) cityName = cityData.city;
+    else cityName = cityData.village;
+
+    return [areaID, { cityname: cityName }];
+}
+
+function collectData(geoDataSet, counter) {
+    translateLatLongToCityData(geoDataSet[counter]).then(
+        value => {
+            console.log("VALUE ", value);
+            myObject.push(value);
+            console.log("MYOBJECT ", myObject);
+            counter++;
+            var rand = Math.ceil(40000 * Math.random());
+            if (counter < 1056) {
+                setTimeout(function () { collectData(geoDataSet, counter); }, rand);
+            }
+        })
+}
+
+
+async function translateLatLongToCityData(latLong) {
     var lat = latLong[1].lat,
         long = latLong[1].long;
     // cityUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+ lat + ","+ long + "&key=AIzaSyAbI0apjUDIAYQua581VGPwBsDOqtD-FsA", 
     cityUrl = "https://nominatim.openstreetmap.org/reverse?format=json&lat=" + lat + "&lon=" + long + "&zoom=18&addressdetails=1";
-    
-    return cityName = [latLong[0], {"cityname": "Guustown"}];
 
-    // const response = await fetch(cityUrl);
-    // const data = await response.json();
-    // return cityName = await data.address.town;
+
+    const response = await fetch(cityUrl);
+    const data = await response.json();
+    const cityName = await data.address;
+
+
+    return [latLong[0], { "cityname": cityName }];
 }
 
 
-//  https://maps.googleapis.com/maps/api/geocode/json?latlng=[LAT],[LONG]&key=AIzaSyAbI0apjUDIAYQua581VGPwBsDOqtD-FsA
 
 function shapeToLatLong(shape) {
-    var polygonString = shape[1].geodata,
-    lat,
-    long;
-    if (polygonString.includes("POLYGON")) {
-        var pointsArray = polygonString
+    var shapeString = shape[1].geodata,
+        lat,
+        long;
+    if (shapeString.includes("POLYGON")) {
+        var pointsArray = shapeString
             .replace("POLYGON", "")
             .replace("((", "")
             .replace("))", "")
             .trim()
             .split(",");
-        points = pointsArray.map(point => point.trim().split(" ")),
-        lat = getAverage(points, 1),
-        long = getAverage(points, 0);
+        let points = pointsArray.map(point => point.trim().split(" ")),
+            lat = getAverage(points, 1),
+            long = getAverage(points, 0);
     }
     else {
         var latLong = getLatLong(shape);
@@ -187,10 +241,3 @@ function groupByKey(array, key) {
 }
 
 
-//      https://maps.googleapis.com/maps/api/geocode/json?latlng=[LAT],[LONG]&key=AIzaSyAbI0apjUDIAYQua581VGPwBsDOqtD-FsA
-
-
-// API Code LocationIQ pk.d7636e5d5290f28cacda9f815b4a7b0d
-
-
-// API Code Google AIzaSyAbI0apjUDIAYQua581VGPwBsDOqtD-FsA
