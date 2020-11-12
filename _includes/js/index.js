@@ -28,7 +28,7 @@ function initD3Graphs(data) {
     createCityInputs(data);
 
     let combinedCityCapacityObjects = mergeCityCapacities(data, selectedCities);
-    makeGraphsWithD3(combinedCityCapacityObjects, "add");
+    makeGraphsWithD3(combinedCityCapacityObjects, "init");
 }
 
 
@@ -75,10 +75,12 @@ function isCityMatch(dataEntry, selectedCities) {
 }
 
 
-function makeGraphsWithD3(workableData, updateOrAdd) {
-    
+
+var currentlyLoadedData = [];
+function makeGraphsWithD3(workableData, task) {
+
     var tooMuchData = false;
-    if(workableData.length > 16) tooMuchData = true;
+    if (workableData.length > 16) tooMuchData = true;
 
     const svg = d3.select('svg');
 
@@ -92,7 +94,6 @@ function makeGraphsWithD3(workableData, updateOrAdd) {
     const margin = { top: 20, right: 75, bottom: 50, left: 75 }
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
-
     const render = data => {
         const yScale = d3.scaleLinear()
             .domain([0, 8500])
@@ -104,26 +105,15 @@ function makeGraphsWithD3(workableData, updateOrAdd) {
             .range([0, innerWidth])
             .padding(0.1);
 
-        const g = svg.append('g')
-            .attr("transform", `translate(${margin.left}, ${margin.top})`);
+        const group = svg.append('g')
+            .attr("transform", `translate(${margin.left}, ${margin.top})`)
+            .attr("class", "barbox");
 
-
-
-        // if (tooMuchData)
-        //     g.append('g').call(d3.axisBottom(xScale))
-        //         .attr("transform", `translate(0, ${innerHeight})`)
-        //         .selectAll('text')
-        //         .attr("text-anchor", "start")
-        //         .attr("transform", "rotate(45)")
-        //         .attr("dx", "5")
-        //         .attr("dy", "2")
-        // else
-
-        if (updateOrAdd == "add") {
-            svg.selectAll('.bar').remove();
+        if (task == "init") { // creates the whole thing
             svg.selectAll('.ax').remove();
 
-            g.selectAll('rect').data(data)
+            group.selectAll('rect')
+                .data(data)
                 .enter().append('rect')
                 .attr('x', d => xScale(d.stad))
                 .attr('width', xScale.bandwidth())
@@ -131,9 +121,34 @@ function makeGraphsWithD3(workableData, updateOrAdd) {
                 .attr('height', d => innerHeight - yScale(+d.capaciteit))
                 .attr('class', 'bar');
 
-
         }
-        else {
+        else if (task == "add") {  // adds or subtracts a bar, reshapes the rest
+            svg.selectAll('.ax').remove();
+            var allBars = d3.select(".barbox").selectAll('rect')
+                .data(workableData);
+            allBars.enter()
+                .append("rect")
+                .attr('x', width)
+                .attr('y', d => height - yScale(d.capaciteit))
+                .attr('width', xScale.bandwidth())
+                .attr('height', d => yScale(+d.capaciteit))
+                .attr('class', 'bar')
+                .merge(allBars)
+                .transition()
+                .duration(500)
+                .attr('x', d => xScale(d.stad))
+                .attr('y', d => yScale(+d.capaciteit))
+                .attr('width', xScale.bandwidth())
+                .attr('height', d => innerHeight - yScale(+d.capaciteit));
+
+                
+            var oldBars = d3.select(".barbox").selectAll('rect')
+                .data(workableData);
+                oldBars.exit()
+                .remove();
+        }
+
+        else if (task == "update") { // only changes height of the bars already there
             svg.selectAll('.ax').remove();
 
             svg.selectAll("rect")
@@ -144,17 +159,25 @@ function makeGraphsWithD3(workableData, updateOrAdd) {
                 .attr("height", d => innerHeight - yScale(+d.capaciteit));
         }
 
-        
-        g.append('g').call(d3.axisLeft(yScale))
+
+        group.append('g').call(d3.axisLeft(yScale))
             .attr("class", "ax y");
-        g.append('g').call(d3.axisBottom(xScale))
+        group.append('g').call(d3.axisBottom(xScale))
             .attr("transform", `translate(0, ${innerHeight})`)
             .attr("class", "ax x");
 
     }
     render(workableData);
+    currentlyLoadedData = workableData;
 }
 
+
+function isInOldData(entry, oldData) {
+    for (var i in oldData) {
+        if (entry.stad == oldData[i].stad) return true;
+    }
+    return false;
+}
 
 // TIME SLIDER
 d3.select("#time")
@@ -202,11 +225,11 @@ function updateTitle() {
 
 
 // Source: https://www.w3resource.com/javascript-exercises/javascript-basic-exercise-51.php modified a bit myself
-function time_convert(num) { 
-  var hours = Math.floor(num / 60);
-  var minutes = "00";
-  if (hours < 10) hours = "0" + hours;
-  return hours + ":" + minutes;         
+function time_convert(num) {
+    var hours = Math.floor(num / 60);
+    var minutes = "00";
+    if (hours < 10) hours = "0" + hours;
+    return hours + ":" + minutes;
 }
 
 updateTitle();

@@ -2,13 +2,24 @@ var parkingToegangUrl = "https://opendata.rdw.nl/resource/edv8-qiyg.json?$limit=
     parkeerGebiedUrl = "https://opendata.rdw.nl/resource/b3us-f26s.json?$limit=5000",
     geoDataUrl = "https://opendata.rdw.nl/resource/nsk3-v9n7.json?$limit=7000",
 
-    workLocal = true;
+    workLocal = true,
+    githubPagesLinks = false;
 
 if (workLocal) {
+    parkingToegangUrl = "/data/parking-toegang.json"
+    geoDataUrl = "/data/geodata.json"
+    parkeerGebiedUrl = "/data/parkeergebied.json"
+}
+
+
+if (githubPagesLinks) {
     parkingToegangUrl = "/frontend-data/data/parking-toegang.json"
     geoDataUrl = "/frontend-data/data/geodata.json"
     parkeerGebiedUrl = "/frontend-data/data/parkeergebied.json"
 }
+
+
+
 
 let workArray = [];
 let listOfUsableAreaIds = [];
@@ -49,7 +60,10 @@ function addCityNameToWorkArray(geoDataSet) {
 
     // collectData(areaIdsAndGeoDataThatIWant, 0);
 
-    getData('/frontend-data/data/AreaIDwithlocationdata.json').then(
+    var locationDataUrl = '/data/AreaIDwithlocationdata.json'
+    if(githubPagesLinks) locationDataUrl = '/frontend-data/data/AreaIDwithlocationdata.json'
+
+    getData(locationDataUrl).then(
         dataSet => {
             let filteredSet = dataSet.filter(isObjectFilled);
             let areaIDWithCityName = filteredSet.map(cityDataToCityName);
