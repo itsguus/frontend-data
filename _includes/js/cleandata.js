@@ -3,7 +3,7 @@ var parkingToegangUrl = "https://opendata.rdw.nl/resource/edv8-qiyg.json?$limit=
     geoDataUrl = "https://opendata.rdw.nl/resource/nsk3-v9n7.json?$limit=7000",
 
     workLocal = true,
-    githubPagesLinks = false;
+    githubPagesLinks = true;
 
 if (workLocal) {
     parkingToegangUrl = "/data/parking-toegang.json"
