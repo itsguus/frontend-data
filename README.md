@@ -20,4 +20,4 @@ Ik heb de static site generator [Jekyll](https://jekyllrb.com/) gebruikt om te c
 ## Data
 Alle data die ik heb gebruikt komt van het RDW. Een uitgebreide uitleg over de data van het RDW vind je in de [Research Case](https://github.com/itsguus/frontend-data/wiki/Research-Case).
 
-Ik heb ook reverse geocoding gebruikt via een API van [openstreetmap](https://wiki.openstreetmap.org/wiki/API). Dit heb ik met een [redelijke omweg gedaan.](https://github.com/itsguus/frontend-data/wiki/Reverse-Geocoding-data-verzamelen)
+Ik heb ook reverse geocoding gebruikt via een API van [openstreetmap](https://wiki.openstreetmap.org/wiki/API). Dit heb ik met een [redelijke omweg gedaan.](https://github.com/itsguus/frontend-data/wiki/Reverse-Geocoding)
