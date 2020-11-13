@@ -29,7 +29,7 @@ function initD3Graphs(data) {
 
     let combinedCityCapacityObjects = mergeCityCapacities(data, selectedCities);
     makeGraphsWithD3(combinedCityCapacityObjects, "init");
-}
+}  
 
 
 function mergeCityCapacities(data, selectedCities) {

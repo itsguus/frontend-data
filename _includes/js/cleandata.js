@@ -75,6 +75,7 @@ function addCityNameToWorkArray(geoDataSet) {
     );
 }
 
+
 function reformatDataEntry(dataEntry) {
     const areaId = dataEntry[0],
         weekdays = dataEntry[1],
@@ -98,8 +99,6 @@ function cityDataToCityName(cityObject) {
     var cityData = cityObject[1].cityname,
         areaID = cityObject[0],
         cityName = "";
-
-
 
     if ('town' in cityData) cityName = cityData.town;
     else if ('city' in cityData) cityName = cityData.city;
@@ -209,7 +208,6 @@ function addCapacityToWorkArray(dataSet) {
 function transformSingleEntry(entryToAdd, dataSetToBeAddedTo) {
     const entryToAddId = entryToAdd[0],
         entryToAddObjs = entryToAdd[1];
-
 
     if (dataSetToBeAddedTo.find(entry => entry[0] == entryToAddId)) {
         var matchedArray = dataSetToBeAddedTo.find(entry => entry[0] == entryToAddId);
