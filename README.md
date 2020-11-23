@@ -60,7 +60,7 @@ git clone https://github.com/itsguus/functional-programming
 
 cd functional-programming
 
-npm start
+npm install
 
 jekyll serve
 ```
