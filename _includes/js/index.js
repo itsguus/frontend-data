@@ -1,12 +1,12 @@
 function createCityInputs(data) {
     const citybox = document.querySelector('.cities');
     let allCityNames = [];
-    for (var i in data) {
+    for (let i in data) {
         if (!allCityNames.includes(data[i].stad)) {
             allCityNames.push(data[i].stad);
         }
     }
-    for (var city in allCityNames) {
+    for (let city in allCityNames) {
         let box = document.createElement("div");
         let input = document.createElement("input")
         input.setAttribute('type', 'checkbox');
@@ -26,7 +26,6 @@ function createCityInputs(data) {
 
 function initD3Graphs(data) {
     createCityInputs(data);
-
     let combinedCityCapacityObjects = mergeCityCapacities(data, selectedCities);
     makeGraphsWithD3(combinedCityCapacityObjects, "init");
 }
@@ -53,10 +52,10 @@ function isObjectOpened(cityObject) {
 }
 
 function addCapacities(cityObject, selectedCities) {
-    var totals = []
-    for (var i in selectedCities) {
+    let totals = []
+    for (let i in selectedCities) {
         totals[i] = { stad: selectedCities[i], capaciteit: 0, laadpalen: 0 };
-        for (var city in cityObject) {
+        for (let city in cityObject) {
             if (selectedCities[i] == cityObject[city].stad) {
                 totals[i].capaciteit += parseInt(cityObject[city].capaciteit);
             }
@@ -66,7 +65,7 @@ function addCapacities(cityObject, selectedCities) {
 }
 
 function isCityMatch(dataEntry, selectedCities) {
-    for (var city in selectedCities) {
+    for (let city in selectedCities) {
         if (selectedCities[city] == dataEntry.stad) {
             return true;
         }
@@ -143,7 +142,7 @@ function update(workableData) {
         .padding(0.1); // meaning distance between the bars
     
 
-        var allBars = d3.select(".barbox").selectAll('rect')// selecting the bars that are already made, putting them into a variable.
+        let allBars = d3.select(".barbox").selectAll('rect')// selecting the bars that are already made, putting them into a letiable.
             .data(data);  // put in the new data
         allBars.enter() // focus on what's new.
             .append("rect") // make a rect for this.
@@ -164,7 +163,7 @@ function update(workableData) {
             .attr('width', xScale.bandwidth()) // same width
             .attr('height', d => innerHeight - yScale(+d.capaciteit)); // same height
 
-        var oldBars = d3.select(".barbox").selectAll('rect')  // selecting the bars that are already made, putting them into a variable.
+        let oldBars = d3.select(".barbox").selectAll('rect')  // selecting the bars that are already made, putting them into a letiable.
             .data(data); // put in the new data
         oldBars.exit() // focus on what's old.
             .remove(); // and get rid of that.
@@ -185,7 +184,7 @@ function update(workableData) {
 
 
 function isInOldData(entry, oldData) {
-    for (var i in oldData) {
+    for (let i in oldData) {
         if (entry.stad == oldData[i].stad) return true;
     }
     return false;
@@ -202,7 +201,7 @@ d3.select("#time")
 
 
 // CITIES CHECKBOXES
-var selectedCities = ["Amsterdam", "Delft", "Assen", "Den Haag"];
+let selectedCities = ["Amsterdam", "Delft", "Assen", "Den Haag"];
 d3.selectAll('.cities')
     .on("click", function (e) {
         if (e.target.type == "checkbox") {
@@ -228,7 +227,7 @@ d3.selectAll('input[type=radio]')
 
 function updateTitle() {
     document.querySelector(".day").textContent = document.querySelector("input[type=radio]:checked").value;
-    var range = time_convert(document.querySelector("input[type=range]").value * 60);
+    let range = time_convert(document.querySelector("input[type=range]").value * 60);
 
     document.querySelector(".time").textContent = range;
     document.querySelector("h3 span").textContent = range;
@@ -238,8 +237,8 @@ function updateTitle() {
 
 // Source: https://www.w3resource.com/javascript-exercises/javascript-basic-exercise-51.php modified a bit myself
 function time_convert(num) {
-    var hours = Math.floor(num / 60);
-    var minutes = "00";
+    let hours = Math.floor(num / 60);
+    let minutes = "00";
     if (hours < 10) hours = "0" + hours;
     return hours + ":" + minutes;
 }
