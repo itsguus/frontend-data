@@ -1,9 +1,9 @@
-var parkingToegangUrl = "https://opendata.rdw.nl/resource/edv8-qiyg.json?$limit=5000",
+let parkingToegangUrl = "https://opendata.rdw.nl/resource/edv8-qiyg.json?$limit=5000",
     parkeerGebiedUrl = "https://opendata.rdw.nl/resource/b3us-f26s.json?$limit=5000",
     geoDataUrl = "https://opendata.rdw.nl/resource/nsk3-v9n7.json?$limit=7000",
 
     workLocal = true,
-    githubPagesLinks = true;
+    githubPagesLinks = false;
 
 if (workLocal) {
     parkingToegangUrl = "/data/parking-toegang.json"
@@ -48,7 +48,7 @@ getData(parkingToegangUrl).then(
 
 
 
-var myObject = [];
+let myObject = [];
 
 function addCityNameToWorkArray(geoDataSet) {
     let areaIdsAndGeoData = geoDataSet.map(entry => [entry.areaid, { geodata: entry.areageometryastext }]),
@@ -60,7 +60,7 @@ function addCityNameToWorkArray(geoDataSet) {
 
     // collectData(areaIdsAndGeoDataThatIWant, 0);
 
-    var locationDataUrl = '/data/AreaIDwithlocationdata.json'
+    let locationDataUrl = '/data/AreaIDwithlocationdata.json'
     if(githubPagesLinks) locationDataUrl = '/frontend-data/data/AreaIDwithlocationdata.json'
 
     getData(locationDataUrl).then(
@@ -81,7 +81,7 @@ function reformatDataEntry(dataEntry) {
         weekdays = dataEntry[1],
         capacity = dataEntry[2].capacity,
         laadPalen = dataEntry[2].laadPalen;
-    var cityName = dataEntry[3].cityname
+    let cityName = dataEntry[3].cityname
 
     if (cityName == null) cityName = dataEntry[4].cityname
 
@@ -96,7 +96,7 @@ function isObjectFilled(object) {
 
 
 function cityDataToCityName(cityObject) {
-    var cityData = cityObject[1].cityname,
+    let cityData = cityObject[1].cityname,
         areaID = cityObject[0],
         cityName = "";
 
@@ -114,7 +114,7 @@ function collectData(geoDataSet, counter) {
             myObject.push(value);
             console.log("MYOBJECT ", myObject);
             counter++;
-            var rand = Math.ceil(40000 * Math.random());
+            let rand = Math.ceil(40000 * Math.random());
             if (counter < 1056) {
                 setTimeout(function () { collectData(geoDataSet, counter); }, rand);
             }
@@ -123,7 +123,7 @@ function collectData(geoDataSet, counter) {
 
 
 async function translateLatLongToCityData(latLong) {
-    var lat = latLong[1].lat,
+    let lat = latLong[1].lat,
         long = latLong[1].long;
     // cityUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng="+ lat + ","+ long + "&key=AIzaSyAbI0apjUDIAYQua581VGPwBsDOqtD-FsA", 
     cityUrl = "https://nominatim.openstreetmap.org/reverse?format=json&lat=" + lat + "&lon=" + long + "&zoom=18&addressdetails=1";
@@ -140,11 +140,11 @@ async function translateLatLongToCityData(latLong) {
 
 
 function shapeToLatLong(shape) {
-    var shapeString = shape[1].geodata,
+    let shapeString = shape[1].geodata,
         lat,
         long;
     if (shapeString.includes("POLYGON")) {
-        var pointsArray = shapeString
+        let pointsArray = shapeString
             .replace("POLYGON", "")
             .replace("((", "")
             .replace("))", "")
@@ -155,7 +155,7 @@ function shapeToLatLong(shape) {
             long = getAverage(points, 0);
     }
     else {
-        var latLong = getLatLong(shape);
+        let latLong = getLatLong(shape);
         lat = latLong[0]
         long = latLong[1]
     }
@@ -163,15 +163,15 @@ function shapeToLatLong(shape) {
 }
 
 function getAverage(array, index) {
-    var total = 0;
-    for (var i in array) {
+    let total = 0;
+    for (let i in array) {
         total = total + parseFloat((array[i][index]));
     }
     return (total / array.length);
 }
 
 function getLatLong(geoPoint) {
-    var latLong = [],
+    let latLong = [],
         pointString = geoPoint[1].geodata;
     latLong = pointString
         .replace("POINT", "")
@@ -210,7 +210,7 @@ function transformSingleEntry(entryToAdd, dataSetToBeAddedTo) {
         entryToAddObjs = entryToAdd[1];
 
     if (dataSetToBeAddedTo.find(entry => entry[0] == entryToAddId)) {
-        var matchedArray = dataSetToBeAddedTo.find(entry => entry[0] == entryToAddId);
+        let matchedArray = dataSetToBeAddedTo.find(entry => entry[0] == entryToAddId);
         matchedArray.push(entryToAddObjs)
         return matchedArray;
     }
@@ -231,7 +231,7 @@ function addDaysToWorkArray(dataSet) {
 
 function deleteExcessData(parkingArea) {
     let weekdays = parkingArea[1]
-    for (var day in weekdays) {
+    for (let day in weekdays) {
         delete weekdays[day].areamanagerid;
         delete weekdays[day].areaid;
         delete weekdays[day].startofperiod;
