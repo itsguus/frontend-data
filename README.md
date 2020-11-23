@@ -1,5 +1,7 @@
 # Frontend Data
-Live on [this link](https://itsguus.github.io/frontend-data/), [Voorbeeld](https://www.youtube.com/watch?v=NlBt-7PuaLk)
+Live on [this link](https://itsguus.github.io/frontend-data/).
+
+[De barchart van Curran heb ik als voorbeeld gebruikt.](https://www.youtube.com/watch?v=NlBt-7PuaLk)
 
 De Tech Track gaat dit jaar over "auto's in de stad". Het doel van de opdracht is om interessante patronen te vinden in de data en deze te transformeren in een interactieve datavisualisatie. Het datalab van de Volkskrant kan deze visualisaties vervolgens gebruiken om artiekelen te schrijven over dit onderwerp.
 
