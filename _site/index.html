@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+ 
+<title></title>
+
+<meta name="description" content="">
+
+<!-- <link rel="shortcut icon" type="image/png" href="/img/icon-196x196.png"> -->
+<!-- <link rel="shortcut icon" sizes="196x196" href="/img/icon-196x196.png"> -->
+<!-- <link rel="apple-touch-icon" href="/img/icon-196x196.png"> -->
+
+<link rel="shortcut icon" href="">
+<link rel="shortcut icon" href="#">
+
+ <!-- Facebook integration -->
+<meta property="og:title" content="Home"/>
+
+<meta property="og:url" content="http://localhost:4000/"/>
+<meta property="og:type" content="article">
+<meta property="og:site_name" content=""/>
+<meta property="og:description" content=""/>
+
+<!-- Twitter integration -->
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:title" content="Home" />
+
+<meta name="twitter:url" content="http://localhost:4000/" />
+<meta name="twitter:description" content="" />
+
+<link rel="canonical" href="http://localhost:4000/">
+<link rel="alternate" type="application/rss+xml" title="" href="http://localhost:4000/feed.xml">
+<link rel="sitemap" type="application/xml" title="Sitemap" href="http://localhost:4000/sitemap.xml" />
+
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap" rel="stylesheet"> 
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet"> 
+
+<link rel="stylesheet" href="/css/style.css">
+
+</head>
+<body class="home" id="top">
+<header>
+
+</header>
+<main> 
+
+<section class="visualisation">
+    <h1>Beschikbare parkeerplaatsen</h1>
+    <h2><span class="day">MAANDAG</span> <span class="time">12:00</span></h2>
+    <svg width="1200" height="600"></svg>
+</section>
+
+
+<section class="inputs">
+    <div class="days">
+        <h3>DAG</h3>
+        <input type="radio" name="DAY" value="MAANDAG" id="MAANDAG" checked=true>
+        <label for="MAANDAG">MA</label>
+        <input type="radio" name="DAY" value="DINSDAG" id="DINSDAG">
+        <label for="DINSDAG">DI</label>
+        <input type="radio" name="DAY" value="WOENSDAG" id="WOENSDAG">
+        <label for="WOENSDAG">WO</label>
+        <input type="radio" name="DAY" value="DONDERDAG" id="DONDERDAG">
+        <label for="DONDERDAG">DO</label>
+        <input type="radio" name="DAY" value="VRIJDAG" id="VRIJDAG">
+        <label for="VRIJDAG">VR</label>
+        <input type="radio" name="DAY" value="ZATERDAG" id="ZATERDAG">
+        <label for="ZATERDAG">ZA</label>
+        <input type="radio" name="DAY" value="ZONDAG" id="ZONDAG">
+        <label for="ZONDAG">ZO</label>
+    </div>
+    <div class="time">
+        <h3>TIJD  <span></span></h3>
+        <span>0:00</span>
+        <input type="range" name="time" id="time" min="0" max="24" value="12">
+        <span>24:00</span>
+    </div>
+    <h3>STEDEN</h3>
+    <div class="cities">
+
+    </div>
+</section>
+
+</main>
+<footer>
+
+</footer>
+<script type="text/javascript" src="https://unpkg.com/d3@6.2.0/dist/d3.min.js"></script>
+<script type="text/javascript" src="/frontend-data/js/combined.js"></script>
+</body>
+</html> 

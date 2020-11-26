@@ -2,8 +2,8 @@ let parkingToegangUrl = "https://opendata.rdw.nl/resource/edv8-qiyg.json?$limit=
     parkeerGebiedUrl = "https://opendata.rdw.nl/resource/b3us-f26s.json?$limit=5000",
     geoDataUrl = "https://opendata.rdw.nl/resource/nsk3-v9n7.json?$limit=7000",
 
-    workLocal = true,
-    githubPagesLinks = false;
+    workLocal = false,
+    githubPagesLinks = true;
 
 if (workLocal) {
     parkingToegangUrl = "/data/parking-toegang.json"
